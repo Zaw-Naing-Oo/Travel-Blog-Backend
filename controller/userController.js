@@ -23,7 +23,7 @@ export const signUp = async (req,res) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 }
 
@@ -44,6 +44,29 @@ export const signIn = async (req,res) => {
 
     } catch (error) {
         // console.log(error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export const googleLogin = async (req,res) => {
+    const { email, name, jti: token, sub: googleId } = req.body;
+    try {
+        const oldUser = await User.findOne({ email });
+
+        if(oldUser) {
+            const result = { email, name, _id: oldUser._id.toString()};
+            return res.status(200).json({ result, token })
+        }
+
+        const result = await User.create({
+            name,
+            email,
+            googleId,
+        });
+        return res.status(200).json({ result, token });
+    
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
     }
 }
