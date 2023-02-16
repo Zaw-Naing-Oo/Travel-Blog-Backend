@@ -4,6 +4,7 @@ import morgan from "morgan";
 import cors from "cors"
 import mongoose from "mongoose";
 import userRouter from "./routes/user-route.js"
+import tourRouter from "./routes/tour-route.js"
 
 
 const app = express();
@@ -20,6 +21,7 @@ dotenv.config();
 
 /* Routes */
 app.use("/user", userRouter);
+app.use("/tour", tourRouter);
 
 
 /* Connecting to database (Mongodb) */
