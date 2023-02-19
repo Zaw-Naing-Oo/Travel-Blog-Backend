@@ -22,8 +22,9 @@ const TourSchema = new Schema({
      type: [String],
      required: false
     },
-    imageFile: {
+    image: {
      type: String,
+     default: ""
     },
     likeCount: {
      type: Number,

@@ -1,12 +1,27 @@
 import Tour from "../Model/tour-model.js";
+import { Buffer } from "buffer"
 
 export const createTour = async (req,res) => {
     const tour = req.body;
+    const { title, description, tags, image } = req.body;
+    console.log(req.body)
+
+    if (!image) {
+        return res.status(400).json({ message: "Image file is required" });
+      }
+
+      // convert image data to buffer
+      const imageData = Buffer.from(image.split(",")[1], "base64");
+
+    console.log(req.body);
     try {
         const newTour = await Tour.create({
-           ...tour,
+            title,
+            description,
+            tags,
+            image: imageData,
         });
-        return res.status(201).json(newTour);
+        return res.status(201).json({newTour});
     } catch (error) {
         console.log(error);
         res.status(400).json({ message: error.message });
