@@ -4,7 +4,7 @@ import { Buffer } from "buffer"
 export const createTour = async (req,res) => {
     const tour = req.body;
     const { title, description, tags, image } = req.body;
-    console.log(req.body)
+    console.log(req.userId);
 
     if (!image) {
         return res.status(400).json({ message: "Image file is required" });
@@ -12,14 +12,13 @@ export const createTour = async (req,res) => {
 
       // convert image data to buffer
       const imageData = Buffer.from(image.split(",")[1], "base64");
-
-    console.log(req.body);
     try {
         const newTour = await Tour.create({
             title,
             description,
             tags,
             image: imageData,
+            creator: req?.userId,
         });
         return res.status(201).json({newTour});
     } catch (error) {

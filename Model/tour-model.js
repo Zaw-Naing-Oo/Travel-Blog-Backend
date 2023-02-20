@@ -16,7 +16,7 @@ const TourSchema = new Schema({
     },
     creator: {
      type: String,
-     required: false
+     required: true
     },
     tags: {
      type: [String],

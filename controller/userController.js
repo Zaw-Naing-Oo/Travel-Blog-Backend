@@ -37,7 +37,7 @@ export const signIn = async (req,res) => {
         const isPasswordMatch = await bcrypt.compare(password, oldUser.password);
         if(!isPasswordMatch) return res.status(400).json({ message: "Password does not match"});
 
-        const token = jwt.sign({ email: oldUser.email }, process.env.SECRET, { expiresIn: "1h"});
+        const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, process.env.SECRET, { expiresIn: "1h"});
 
         return res.status(200).json({ result: oldUser, token });
 
@@ -50,23 +50,31 @@ export const signIn = async (req,res) => {
 
 export const googleLogin = async (req,res) => {
     const { email, name, jti: token, sub: googleId } = req.body;
+
     try {
         const oldUser = await User.findOne({ email });
 
         if(oldUser) {
             const result = { email, name, _id: oldUser._id.toString()};
+             const token = jwt.sign({ email: result.email, name: result.name, _id: result._id }, process.env.SECRET, { expiresIn: "1h"});
             return res.status(200).json({ result, token })
         }
 
-        const result = await User.create({
+        const newUser = await User.create({
             name,
             email,
             googleId,
         });
-        return res.status(200).json({ result, token });
+        const token = jwt.sign(
+            { email: newUser.email, name: newUser.name, _id: newUser._id },
+            process.env.SECRET,
+            { expiresIn: "1h" }
+          );
+        return res.status(200).json({ result: newUser, token });
     
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: error.message });
     }
 }
+// const token = jwt.sign({ email: result.email, name: result.name, _id: result._id }, process.env.SECRET, { expiresIn: "1h"});
