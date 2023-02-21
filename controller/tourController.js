@@ -4,11 +4,11 @@ import { Buffer } from "buffer"
 export const createTour = async (req,res) => {
     const tour = req.body;
     const { title, description, tags, image } = req.body;
-    console.log(req.userId);
+    // console.log(req);
 
     if (!image) {
         return res.status(400).json({ message: "Image file is required" });
-      }
+    }
 
       // convert image data to buffer
       const imageData = Buffer.from(image.split(",")[1], "base64");
@@ -30,7 +30,7 @@ export const createTour = async (req,res) => {
 export const getTours = async (req,res) => {
     try {
         const allTours = await Tour.find();
-        res.status(200).json({allTours});
+        return res.status(200).json({allTours});
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: error.message });

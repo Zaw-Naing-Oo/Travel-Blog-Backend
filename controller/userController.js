@@ -49,24 +49,37 @@ export const signIn = async (req,res) => {
 }
 
 export const googleLogin = async (req,res) => {
-    const { email, name, jti: token, sub: googleId } = req.body;
+    const { email, name, sub } = req.body;
+    console.log(req.body);
 
     try {
         const oldUser = await User.findOne({ email });
 
+        // if(oldUser) {
+        //     const result = { email, name, _id: oldUser._id.toString()};
+        //      const token = jwt.sign({ email: result.email, name: result.name, _id: result._id }, process.env.SECRET, { expiresIn: "1h"});
+        //     return res.status(200).json({ result, token })
+        // }
+
         if(oldUser) {
-            const result = { email, name, _id: oldUser._id.toString()};
-             const token = jwt.sign({ email: result.email, name: result.name, _id: result._id }, process.env.SECRET, { expiresIn: "1h"});
+            const result = { email, name, _id: oldUser._id};
+            console.log(typeof(_id));
+            const token = jwt.sign( { result, sub}, process.env.SECRET, { expiresIn: "1h"})
             return res.status(200).json({ result, token })
         }
 
         const newUser = await User.create({
             name,
             email,
-            googleId,
+            googleId: sub,
         });
+        // const token = jwt.sign(
+        //     { email: newUser.email, name: newUser.name, _id: newUser._id,  },
+        //     process.env.SECRET,
+        //     { expiresIn: "1h" }
+        //   );
         const token = jwt.sign(
-            { email: newUser.email, name: newUser.name, _id: newUser._id },
+            { email: newUser.email, name: newUser.name, _id: newUser._id, sub: newUser?.googleId  },
             process.env.SECRET,
             { expiresIn: "1h" }
           );

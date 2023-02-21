@@ -26,7 +26,7 @@ dotenv.config();
 
 /* Routes */
 app.use("/user", userRouter);
-app.use("/tour", upload.single('image') , tourRouter);
+app.use("/tours", upload.single('image') , tourRouter);
 
 
 /* Connecting to database (Mongodb) */
