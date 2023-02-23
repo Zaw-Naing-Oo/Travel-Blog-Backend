@@ -22,10 +22,14 @@ const TourSchema = new Schema({
      type: [String],
      required: false
     },
+    // image: {
+    //  type: String,
+    //  default: ""
+    // },
     image: {
-     type: String,
-     default: ""
-    },
+        data: Buffer,
+        contentType: String,
+       },
     likeCount: {
      type: Number,
      default: 0,

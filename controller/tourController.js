@@ -3,15 +3,23 @@ import { Buffer } from "buffer"
 
 export const createTour = async (req,res) => {
     const tour = req.body;
-    const { title, description, tags, image } = req.body;
-    // console.log(req);
+    const { title, description, tags, image, imageType } = req.body;
 
     if (!image) {
         return res.status(400).json({ message: "Image file is required" });
     }
 
       // convert image data to buffer
-      const imageData = Buffer.from(image.split(",")[1], "base64");
+        const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
+        const bufferImage = Buffer.from(base64Data, 'base64');
+        const contentType = imageType;
+        const imageData = {
+            data: bufferImage,
+            contentType: contentType
+        };
+        // console.log(imageData);
+        // return;
+
     try {
         const newTour = await Tour.create({
             title,
