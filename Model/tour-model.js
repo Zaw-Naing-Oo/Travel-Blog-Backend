@@ -20,7 +20,7 @@ const TourSchema = new Schema({
     },
     tags: {
      type: [String],
-     required: false
+     required: true
     },
     // image: {
     //  type: String,
@@ -29,6 +29,7 @@ const TourSchema = new Schema({
     image: {
         data: Buffer,
         contentType: String,
+        imageName: String,
        },
     likeCount: {
      type: Number,
