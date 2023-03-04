@@ -131,7 +131,7 @@ export const updateTour = async (req,res) => {
             description,
             tags,
             _id: id,
-            imageData,
+            image: imageData
         }
 
         const updatedTour = await Tour.findByIdAndUpdate(id, updateTourData, { new: true });
