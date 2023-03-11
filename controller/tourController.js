@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 export const createTour = async (req,res) => {
     const tour = req.body;
-    const { title, description, tags, image, imageType, name, imageName } = req.body;
+    const { title, description, tags, image, imageType, name, imageName, userId } = req.body;
     if (!image) {
         return res.status(400).json({ message: "Image file is required" });
     }
@@ -28,7 +28,7 @@ export const createTour = async (req,res) => {
             tags,
             image: imageData,
             name: name,
-            creator: req?.userId,
+            creator: userId,
         });
         return res.status(201).json({newTour});
     } catch (error) {
@@ -74,14 +74,14 @@ export const getTourToEdit = async (req,res) => {
 
 export const getToursByUser = async (req,res) => {
     const { id } = req.params;
-    // console.log(req.params);
+    console.log(req.params);
     try {
         if(!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(404).json({ message: "User does not exist"})
         }
 
         const userTours = await Tour.find({ creator: id });
-        // console.log(userTours);
+        console.log(userTours);
         return res.status(200).json({userTours});
     } catch (error) {
         console.log(error);
@@ -115,6 +115,9 @@ export const updateTour = async (req,res) => {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(404).json({ message: "Invalid ID" });
         }
+        if (!image) {
+            return res.status(400).json({ message: "Image file is required" });
+        }
 
          // convert image data to buffer
          const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
@@ -139,5 +142,22 @@ export const updateTour = async (req,res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Server error" });
+    }
+}
+
+export const getToursBySearch = async (req,res) => {
+    const { searchQuery } = req.query;
+    // console.log(req.params);
+    try {
+        // if(!mongoose.Types.ObjectId.isValid(id)) {
+        //     return res.status(404).json({ message: "User does not exist"})
+        // }
+
+        // const userTours = await Tour.find({ creator: id });
+        // // console.log(userTours);
+        // return res.status(200).json({userTours});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Server Error" });
     }
 }
