@@ -8,11 +8,11 @@ router.get("/", getTours);
 router.get("/detail/:id", getTour);
 router.get("/search", getToursBySearch);
 
-router.get("/createOrEdit/:id", getTourToEdit);
-router.get("/dashboard/:id", getToursByUser);
-router.post("/createOrEdit", createTour);
-router.patch("/createOrEdit/:id", updateTour);
-router.delete("/dashboard/:id", deleteTour);
+router.get("/createOrEdit/:id", verifyToken, getTourToEdit);
+router.get("/dashboard/:id", verifyToken,  getToursByUser);
+router.post("/createOrEdit", verifyToken,  createTour);
+router.patch("/createOrEdit/:id", verifyToken,  updateTour);
+router.delete("/dashboard/:id", verifyToken,  deleteTour);
 
 
 export default router;

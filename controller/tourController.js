@@ -147,17 +147,14 @@ export const updateTour = async (req,res) => {
 
 export const getToursBySearch = async (req,res) => {
     const { searchQuery } = req.query;
-    // console.log(req.params);
+    console.log(searchQuery);
     try {
-        // if(!mongoose.Types.ObjectId.isValid(id)) {
-        //     return res.status(404).json({ message: "User does not exist"})
-        // }
-
-        // const userTours = await Tour.find({ creator: id });
-        // // console.log(userTours);
-        // return res.status(200).json({userTours});
+        const title = new RegExp(searchQuery, "i");
+        const searchedTour = await Tour.find({ title });
+        console.log(searchedTour);
+        return res.status(200).json(searchedTour);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Server Error" });
+        res.status(404).json({ message: "Something Went Wrong" });
     }
 }
