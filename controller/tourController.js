@@ -38,13 +38,33 @@ export const createTour = async (req,res) => {
 };
 
 export const getTours = async (req,res) => {
+    // try {
+    //     const allTours = await Tour.find();
+    //     return res.status(200).json({allTours});
+
+    //     const query = req?.query;
+
+    // } catch (error) {
+    //     console.log(error);
+    //     res.status(500).json({ message: "Server Error "});
+    // }
     try {
-        const allTours = await Tour.find();
-        return res.status(200).json({allTours});
-    } catch (error) {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 4;
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+    
+        const allTours = await Tour.find().skip(startIndex).limit(limit);
+    
+        return res.status(200).json({
+          page,
+          totalPages: Math.ceil((await Tour.countDocuments()) / limit),
+          allTours: allTours,
+        });
+      } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Server Error "});
-    }
+        res.status(500).json({ message: "Server Error " });
+      }
 }
 
 export const getTour = async (req,res) => {
