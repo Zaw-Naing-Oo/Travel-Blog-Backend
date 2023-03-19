@@ -22,19 +22,19 @@ const TourSchema = new Schema({
      type: [String],
      required: true
     },
-    // image: {
-    //  type: String,
-    //  default: ""
-    // },
     image: {
         data: Buffer,
         contentType: String,
         imageName: String,
        },
-    likeCount: {
-     type: Number,
-     default: 0,
-    }
+    // likeCount: {
+    //  type: Number,
+    //  default: 0,
+    // }
+    likes: {
+        type: Map,
+        of: Boolean,
+      },
     // createdAt: { type: Date, default: Date.now }
  }, { timestamps: true });
  

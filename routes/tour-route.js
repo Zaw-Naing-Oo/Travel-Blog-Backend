@@ -1,5 +1,5 @@
 import express from "express"
-import { createTour, deleteTour, getTour, getTours, getToursBySearch, getToursByUser, getTourToEdit, updateTour  } from "../controller/tourController.js";
+import { createTour, deleteTour, getTour, getTours, getToursBySearch, getToursByUser, getTourToEdit, likeTour, updateTour  } from "../controller/tourController.js";
 import verifyToken from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -13,6 +13,7 @@ router.get("/dashboard/:id", verifyToken,  getToursByUser);
 router.post("/createOrEdit", verifyToken,  createTour);
 router.patch("/createOrEdit/:id", verifyToken,  updateTour);
 router.delete("/dashboard/:id", verifyToken,  deleteTour);
+router.post("/likes/:id", verifyToken, likeTour);
 
 
 export default router;

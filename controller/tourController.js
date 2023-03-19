@@ -29,10 +29,11 @@ export const createTour = async (req,res) => {
             image: imageData,
             name: name,
             creator: userId,
+            likes: {},
         });
         return res.status(201).json({newTour});
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(400).json({ message: "Server Error" });
     }
 };
@@ -62,7 +63,7 @@ export const getTours = async (req,res) => {
           allTours: allTours,
         });
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(500).json({ message: "Server Error " });
       }
 }
@@ -94,14 +95,14 @@ export const getTourToEdit = async (req,res) => {
 
 export const getToursByUser = async (req,res) => {
     const { id } = req.params;
-    console.log(req.params);
+    // console.log(req.params);
     try {
         if(!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(404).json({ message: "User does not exist"})
         }
 
         const userTours = await Tour.find({ creator: id });
-        console.log(userTours);
+        // console.log(userTours);
         return res.status(200).json({userTours});
     } catch (error) {
         console.log(error);
@@ -176,5 +177,39 @@ export const getToursBySearch = async (req,res) => {
     } catch (error) {
         console.log(error);
         res.status(404).json({ message: "Something Went Wrong" });
+    }
+}
+
+export const likeTour = async (req,res) => {
+    const { id: tourId } = req.params;
+    const { userId } = req.body;
+    try {
+
+        if(!mongoose.Types.ObjectId.isValid(tourId)) {
+            return res.status(404).json({ message: "User does not exist"})
+        }
+
+        const tourPost = await Tour.findById(tourId);
+        if (!tourPost) {
+            return res.status(404).json({ message: "Post does not exist" });
+        }
+        const isLiked = tourPost.likes.get(userId);
+
+        if(isLiked) {
+           tourPost.likes.delete(userId)
+        } else {
+           tourPost.likes.set(userId, true)
+        }
+
+        const updatedTour = await Tour.findByIdAndUpdate(
+            tourId,
+            { likes: tourPost.likes },
+            { new: true }
+        )
+
+        return res.status(200).json(updatedTour);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Server error" });
     }
 }
