@@ -27,15 +27,31 @@ const TourSchema = new Schema({
         contentType: String,
         imageName: String,
        },
-    // likeCount: {
-    //  type: Number,
-    //  default: 0,
-    // }
     likes: {
         type: Map,
         of: Boolean,
       },
-    // createdAt: { type: Date, default: Date.now }
+    comments: [
+      {
+        user: {
+          type: mongoose.Schema.ObjectId,
+          required: true,
+        },
+        userName:{
+          type:String,
+          required:true
+        },
+        comment:{
+          type:String,
+          required:true
+        },
+        date: {
+          type: Date,
+          default: Date.now,
+          required: true
+        }
+      }
+    ],
  }, { timestamps: true });
  
  const Tour = mongoose.model("Tour", TourSchema);
