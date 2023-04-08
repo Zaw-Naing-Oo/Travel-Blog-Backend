@@ -41,7 +41,7 @@ export const createTour = async (req,res) => {
 export const getTours = async (req,res) => {
     try {
         const page = parseInt(req.query.page) || 1;
-        const limit = 4;
+        const limit = 8;
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
     
@@ -158,11 +158,17 @@ export const updateTour = async (req,res) => {
 
 export const getToursBySearch = async (req,res) => {
     const { searchQuery } = req.query;
-    console.log(searchQuery);
+    // console.log(searchQuery);
     try {
-        const title = new RegExp(searchQuery, "i");
-        const searchedTour = await Tour.find({ title });
-        console.log(searchedTour);
+        const searchRegex = new RegExp(searchQuery, "i");
+        // const searchedTour = await Tour.find({ searchRegex });
+        const searchedTour = await Tour.find({
+            $or: [
+                { title : searchRegex },
+                { tags : { $in: [searchRegex ] } },
+            ],
+        });
+        // console.log(searchedTour);
         return res.status(200).json(searchedTour);
     } catch (error) {
         console.log(error);
