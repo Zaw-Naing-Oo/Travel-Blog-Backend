@@ -9,9 +9,6 @@ import multer from "multer";
 
 
 const app = express();
-// app.get("/", (req,res) => {
-//     res.send("hi")
-// });
 
 app.use(cors());
 app.use(morgan("dev"));

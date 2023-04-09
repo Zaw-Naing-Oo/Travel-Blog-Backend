@@ -18,8 +18,7 @@ export const createTour = async (req,res) => {
             contentType: contentType,
             imageName : imageName || "" 
         };
-        // console.log(imageData);
-        // return;
+       
 
     try {
         const newTour = await Tour.create({
@@ -33,7 +32,6 @@ export const createTour = async (req,res) => {
         });
         return res.status(201).json({newTour});
     } catch (error) {
-        // console.log(error);
         res.status(400).json({ message: "Server Error" });
     }
 };
@@ -53,7 +51,6 @@ export const getTours = async (req,res) => {
           allTours: allTours,
         });
       } catch (error) {
-        // console.log(error);
         res.status(500).json({ message: "Server Error " });
       }
 }
@@ -62,10 +59,8 @@ export const getTour = async (req,res) => {
     const { id } = req.params;
     try {
         const tour = await Tour.findById(id);
-        // console.log(tour);
         return res.status(200).json({tour});
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Server Error" });
     }
 }
@@ -74,10 +69,8 @@ export const getTourToEdit = async (req,res) => {
     const { id } = req.params;
     try {
         const tour = await Tour.findById(id);
-        // console.log(tour);
         return res.status(200).json({tour});
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Server Error" });
     }
 }
@@ -85,17 +78,14 @@ export const getTourToEdit = async (req,res) => {
 
 export const getToursByUser = async (req,res) => {
     const { id } = req.params;
-    // console.log(req.params);
     try {
         if(!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(404).json({ message: "User does not exist"})
         }
 
         const userTours = await Tour.find({ creator: id });
-        // console.log(userTours);
         return res.status(200).json({userTours});
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Server Error" });
     }
 }
@@ -114,7 +104,6 @@ export const deleteTour = async (req,res) => {
         }
         return  res.status(200).json({ message: "Tour deleted successfully", tour: deletedTour });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Server error" });
     }
 }
@@ -151,27 +140,22 @@ export const updateTour = async (req,res) => {
         const updatedTour = await Tour.findByIdAndUpdate(id, updateTourData, { new: true });
         return res.status(200).json({ message: "Updated Successfully", tour: updatedTour });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Server error" });
     }
 }
 
 export const getToursBySearch = async (req,res) => {
     const { searchQuery } = req.query;
-    // console.log(searchQuery);
     try {
         const searchRegex = new RegExp(searchQuery, "i");
-        // const searchedTour = await Tour.find({ searchRegex });
         const searchedTour = await Tour.find({
             $or: [
                 { title : searchRegex },
                 { tags : { $in: [searchRegex ] } },
             ],
         });
-        // console.log(searchedTour);
         return res.status(200).json(searchedTour);
     } catch (error) {
-        console.log(error);
         res.status(404).json({ message: "Something Went Wrong" });
     }
 }
@@ -205,7 +189,6 @@ export const likeTour = async (req,res) => {
 
         return res.status(200).json(updatedTour);
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Server error" });
     }
 }

@@ -22,7 +22,6 @@ export const signUp = async (req,res) => {
         return res.status(201).json({ result, token});
 
     } catch (error) {
-        // console.log(error);
         res.status(500).json({ message: error.message });
     }
 }
@@ -43,21 +42,18 @@ export const signIn = async (req,res) => {
 
 
     } catch (error) {
-        // console.log(error);
         res.status(500).json({ message: error.message });
     }
 }
 
 export const googleLogin = async (req,res) => {
     const { email, name, sub } = req.body;
-    // console.log(req.body);
 
     try {
         const oldUser = await User.findOne({ email });
 
         if(oldUser) {
             const result = { email, name, _id: oldUser._id};
-            // console.log(typeof(_id));
             const token = jwt.sign( { result, sub}, process.env.SECRET, { expiresIn: "1h"})
             return res.status(200).json({ result, token })
         }
@@ -75,7 +71,6 @@ export const googleLogin = async (req,res) => {
         return res.status(200).json({ result: newUser, token });
     
     } catch (error) {
-        // console.log(error);
         res.status(500).json({ message: error.message });
     }
 }

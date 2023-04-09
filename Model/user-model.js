@@ -19,9 +19,6 @@ const UserSchema = new Schema({
     type: String,
     required: false
    },
-   // id: {
-   //  type: String,
-   // }
 });
 
 const User = mongoose.model("User", UserSchema);
